@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Internship Task</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+font-family: Arial;
+margin:0;
+background:#f4f4f4;
+color:black;
+transition:0.3s;
+}
+
+.dark-mode{
+background:#121212;
+color:white;
+}
+
+.dark-mode .section{
+background:#1e1e1e;
+}
+
+.dark-mode .grid-box{
+background:#2c2c2c;
+}
+
+.dark-mode .todo li{
+background:#2c2c2c;
+}
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#333;
+color:white;
+padding:15px;
+}
+
+.navbar ul{
+display:flex;
+list-style:none;
+gap:20px;
+}
+
+.navbar a{
+color:white;
+text-decoration:none;
+}
+
+.toggle-btn{
+background:white;
+color:black;
+padding:6px 10px;
+border:none;
+cursor:pointer;
+border-radius:4px;
+}
+
+.section{
+background:white;
+margin:20px;
+padding:20px;
+border-radius:8px;
+box-shadow:0 0 5px gray;
+}
+
+.grid-layout{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:20px;
+margin-top:20px;
+}
+
+.grid-box{
+background:#eee;
+padding:30px;
+text-align:center;
+cursor:pointer;
+border-radius:5px;
+}
+
+form{
+display:flex;
+flex-direction:column;
+}
+
+input, textarea{
+padding:10px;
+margin:8px 0;
+border:1px solid #ccc;
+}
+
+button{
+padding:10px;
+background:purple;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+.error{
+color:red;
+font-size:14px;
+}
+
+.todo ul{
+list-style:none;
+padding:0;
+}
+
+.todo li{
+background:#eee;
+margin:8px 0;
+padding:10px;
+display:flex;
+justify-content:space-between;
+}
+
+@media(max-width:768px){
+
+.navbar{
+flex-direction:column;
+}
+
+.navbar ul{
+flex-direction:column;
+}
+
+.grid-layout{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+<h2>My Website</h2>
+
+<ul>
+<li><a href="#step1">Contact Form</a></li>
+<li><a href="#step2">Validation</a></li>
+<li><a href="#step3">Responsive Layout</a></li>
+<li><a href="#step4">To-Do List</a></li>
+</ul>
+
+<button class="toggle-btn" onclick="toggleMode()">🌙</button>
+
+</nav>
+
+<div class="section" id="step1">
+
+<h2>Contact Form</h2>
+
+<form id="contactForm">
+
+<input type="text" id="name" placeholder="Enter Name">
+<span class="error" id="nameError"></span>
+
+<input type="email" id="email" placeholder="Enter Email">
+<span class="error" id="emailError"></span>
+
+<textarea id="message" placeholder="Enter Message"></textarea>
+<span class="error" id="msgError"></span>
+
+<button type="submit">Submit</button>
+
+</form>
+
+</div>
+
+<div class="section" id="step2">
+
+<h2>JavaScript Form Validation</h2>
+<p>The form validates required fields and email format using JavaScript.</p>
+
+</div>
+
+<div class="section" id="step3">
+
+<h2>Responsive Layout</h2>
+
+<div class="grid-layout">
+
+<div class="grid-box" onclick="showBox(1)">Box 1</div>
+<div class="grid-box" onclick="showBox(2)">Box 2</div>
+<div class="grid-box" onclick="showBox(3)">Box 3</div>
+
+</div>
+
+<p id="boxMessage"></p>
+
+</div>
+<div class="section todo" id="step4">
+
+<h2>Dynamic To-Do List</h2>
+
+<input type="text" id="taskInput" placeholder="Enter task">
+<button onclick="addTask()">Add Task</button>
+
+<ul id="taskList"></ul>
+
+</div>
+
+<script>
+
+document.getElementById("contactForm").addEventListener("submit",function(e){
+
+e.preventDefault();
+
+let name=document.getElementById("name").value;
+let email=document.getElementById("email").value;
+let message=document.getElementById("message").value;
+
+let emailPattern=/^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+document.getElementById("nameError").innerHTML="";
+document.getElementById("emailError").innerHTML="";
+document.getElementById("msgError").innerHTML="";
+
+let valid=true;
+
+if(name==""){
+document.getElementById("nameError").innerHTML="Name required";
+valid=false;
+}
+
+if(email=="" || !email.match(emailPattern)){
+document.getElementById("emailError").innerHTML="Valid email required";
+valid=false;
+}
+
+if(message==""){
+document.getElementById("msgError").innerHTML="Message required";
+valid=false;
+}
+
+if(valid){
+alert("Form submitted successfully!");
+}
+
+});
+
+function addTask(){
+
+let input=document.getElementById("taskInput");
+let task=input.value;
+
+if(task==="") return;
+
+let li=document.createElement("li");
+
+li.innerHTML = task +
+' <button onclick="removeTask(this)">Delete</button>';
+
+document.getElementById("taskList").appendChild(li);
+
+input.value="";
+
+}
+
+function removeTask(btn){
+btn.parentElement.remove();
+}
+
+function showBox(num){
+
+let message="";
+
+if(num==1){
+message="You clicked Box 1:This demonstrates a grid item.";
+}
+
+if(num==2){
+message="You clicked Box 2:This is another grid item in the responsive layout.";
+}
+
+if(num==3){
+message="You clicked Box 3:Grid items adjust based on screen size.";
+}
+
+document.getElementById("boxMessage").innerHTML=message;
+
+}
+
+function toggleMode(){
+
+document.body.classList.toggle("dark-mode");
+
+let btn=document.querySelector(".toggle-btn");
+
+if(document.body.classList.contains("dark-mode")){
+btn.innerHTML="☀️";
+}else{
+btn.innerHTML="🌙";
+}
+
+}
+
+</script>
+
+</body>
+</html>
